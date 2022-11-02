@@ -5,6 +5,12 @@
 
 #include "nfa.hpp"
 
-bool search(Nfa nfa, const std::string exp);
+class Matcher {
+ private:
+  Nfa nfa;
 
+ public:
+  Matcher(std::string exp) : nfa{Nfa(exp)} {}
+  bool exact_match(const std::string exp);
+};
 #endif /* ifndef REGEX_HPP */

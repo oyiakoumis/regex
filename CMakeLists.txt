@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+add_compile_options(-fsanitize=address)
+add_link_options(-fsanitize=address)
+
 # Add warning flags (GCC)
 set(WARNING_FLAGS "-Werror;-Wall;-Wextra;-Wconversion;\
 -Wsign-conversion;-Wfloat-equal;-Wundef;-Wshadow;\

@@ -29,14 +29,14 @@ class NfaState {
       std::vector<std::shared_ptr<NfaState>>& next_pstates,
       std::vector<std::shared_ptr<NfaState>>& visited);
 
-  friend bool search(Nfa nfa, const std::string exp);
+  friend class Matcher;
 };
 
 class Nfa {
  private:
   std::shared_ptr<NfaState> head;
   std::shared_ptr<NfaState> tail;
-  std::string representation;
+  std::string postfix_rep;
 
  public:
   Nfa();
@@ -49,7 +49,7 @@ class Nfa {
   Nfa& one_or_more();
   Nfa& closure();
 
-  friend bool search(Nfa nfa, const std::string exp);
+  friend class Matcher;
   friend std::ostream& operator<<(std::ostream&, const Nfa&);
 };
 

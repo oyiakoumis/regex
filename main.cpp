@@ -1,14 +1,20 @@
 #include <iostream>
 #include <string>
 
-#include "nfa.hpp"
-#include "parser.hpp"
-// #include "regex.hpp"
+#include "regex.hpp"
 
-int main() {
-  std::string exp = "(a|b)*c";
+int main(int argc, char *argv[]) {
+  std::string exp1, exp2;
+  if (argc != 3) {
+    exp1 = "(a|b)*c";
+    exp2 = "abc";
+  } else {
+    exp1 = argv[1];
+    exp2 = argv[2];
+  }
 
-  std::cout << Nfa(exp);
+  Matcher matcher(exp1);
+  std::cout << (matcher.exact_match(exp2) ? "true" : "false") << std::endl;
 
   return 0;
 }

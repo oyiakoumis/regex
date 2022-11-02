@@ -8,7 +8,7 @@
 #include "parser.hpp"
 
 std::ostream& operator<<(std::ostream& out, const Nfa& nfa) {
-  out << "N(" << nfa.representation << ")";
+  out << "N(" << to_infix(nfa.postfix_rep) << ")";
   return out;
 }
 void NfaState::add_w_epsilon_transition(std::shared_ptr<NfaState> state) {
@@ -28,14 +28,14 @@ Nfa::Nfa() {
   head = std::make_shared<NfaState>();
   tail = std::make_shared<NfaState>();
   head->add_s_epsilon_transition(tail);
-  representation = "";
+  postfix_rep = "";
 }
 
 Nfa::Nfa(const char symbol) {
   head = std::make_shared<NfaState>();
   tail = std::make_shared<NfaState>();
   head->add_symbol_transition(tail, symbol);
-  representation = symbol;
+  postfix_rep = symbol;
 }
 
 Nfa::Nfa(const std::string exp) {
@@ -90,8 +90,7 @@ Nfa& Nfa::make_union(Nfa& other_nfa) {
   other_nfa.tail->add_s_epsilon_transition(end);
   this->tail = end;
 
-  this->representation =
-      "(" + this->representation + "|" + other_nfa.representation + ")";
+  this->postfix_rep = this->postfix_rep + other_nfa.postfix_rep + "|";
 
   return *this;
 }
@@ -100,7 +99,7 @@ Nfa& Nfa::concat(Nfa& other_nfa) {
   this->tail->add_s_epsilon_transition(other_nfa.head);
   this->tail = other_nfa.tail;
 
-  this->representation = this->representation + "." + other_nfa.representation;
+  this->postfix_rep = this->postfix_rep + other_nfa.postfix_rep + ".";
 
   return *this;
 }
@@ -116,7 +115,7 @@ Nfa& Nfa::zero_or_one() {
   this->head = start;
   this->tail = end;
 
-  this->representation = this->representation + "?";
+  this->postfix_rep = this->postfix_rep + "?";
 
   return *this;
 }
@@ -132,7 +131,7 @@ Nfa& Nfa::one_or_more() {
   this->head = start;
   this->tail = end;
 
-  this->representation = this->representation + "+";
+  this->postfix_rep = this->postfix_rep + "+";
 
   return *this;
 }
@@ -149,7 +148,7 @@ Nfa& Nfa::closure() {
   this->head = start;
   this->tail = end;
 
-  this->representation = this->representation + "*";
+  this->postfix_rep = this->postfix_rep + "*";
 
   return *this;
 }

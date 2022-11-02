@@ -72,3 +72,37 @@ std::string to_postfix(const std::string exp) {
 
   return postfix_exp;
 }
+
+std::string to_infix(const std::string postfix_exp) {
+  std::stack<std::string> s;
+  std::string c1, c2;
+
+  for (auto token : postfix_exp) {
+    if (token != '.' && token != '|' && token != '?' && token != '*' &&
+        token != '+') {
+      s.push(std::string(1, token));
+    } else {
+      if (token == '|' || token == '.') {
+        c2 = s.top();
+        s.pop();
+        c1 = s.top();
+        s.pop();
+        if (token == '|') {
+          s.push("(" + c1 + token + c2 + ")");
+        } else {
+          s.push(c1 + c2);
+        }
+      } else {
+        c1 = s.top();
+        s.pop();
+        if (c1.size() == 1 || (c1[0] == '(' && c1.back() == ')')) {
+          s.push(c1 + token);
+        } else {
+          s.push("(" + c1 + ")" + token);
+        }
+      }
+    }
+  }
+
+  return s.top();
+}
